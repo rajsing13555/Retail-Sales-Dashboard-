@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Superstore Retail Sales Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1E2430; --paper:#F4F1EA; --card:#FFFFFF; --line:#E4DFD2;
+    --muted:#7C7669; --accent:#1D6E56; --accent2:#B5573A; --accent3:#3E5C8A;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; font-family:'Segoe UI',Helvetica,Arial,sans-serif; background:var(--paper); color:var(--ink); padding:28px 20px 60px;}
+  .wrap{ max-width:1180px; margin:0 auto; }
+  header{ margin-bottom:22px; }
+  header h1{ font-size:22px; margin:0 0 4px; }
+  header p{ font-size:13px; color:var(--muted); margin:0; }
+  .kpi-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:26px; }
+  .kpi{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 14px; }
+  .kpi .label{ font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px;}
+  .kpi .value{ font-size:22px; font-weight:700; }
+  .grid2{ display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px; }
+  .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:16px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px 10px; }
+  .card h3{ font-size:13.5px; margin:0 0 10px; font-weight:700; }
+  .card-note{ font-size:11.5px; color:var(--muted); margin:6px 0 0; }
+  canvas{ max-height:260px; }
+  .callout{ background:#FBEAE3; border:1px solid #EFC9B8; border-radius:14px; padding:14px 18px; margin-bottom:16px; font-size:13px; }
+  .callout b{ color:var(--accent2); }
+  @media(max-width:900px){ .kpi-grid{ grid-template-columns:repeat(2,1fr);} .grid2,.grid3{ grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Superstore Retail Sales Dashboard</h1>
+    <p>2013–2016 · US retail sales dataset · 6,455 orders across 4 regions · built with Python (pandas, SQL) + Chart.js</p>
+  </header>
+
+  <div class="kpi-grid" id="kpi-grid"></div>
+
+  <div id="loss-callout"></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Monthly revenue trend (2013–2016)</h3>
+      <canvas id="chart-monthly"></canvas>
+    </div>
+    <div class="card">
+      <h3>Revenue by department</h3>
+      <canvas id="chart-dept"></canvas>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Revenue vs. profit by category</h3>
+      <canvas id="chart-category"></canvas>
+      <p class="card-note">Categories with negative profit are the ones to investigate first — see callout above.</p>
+    </div>
+    <div class="card">
+      <h3>Profit by region</h3>
+      <canvas id="chart-region"></canvas>
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <h3>Customer segment profitability</h3>
+      <canvas id="chart-segment"></canvas>
+    </div>
+    <div class="card">
+      <h3>Avg. days to ship, by mode</h3>
+      <canvas id="chart-shipmode"></canvas>
+    </div>
+    <div class="card">
+      <h3>Top 10 customers by revenue</h3>
+      <canvas id="chart-topcust"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+fetch('data.json').then(r => r.json()).then(data => {
+
+  const fmt = n => '$' + Number(n).toLocaleString();
+
+  // KPI cards
+  const kpiGrid = document.getElementById('kpi-grid');
+  const kpis = [
+    { label: 'Total revenue', value: fmt(data.kpis.total_revenue) },
+    { label: 'Total profit', value: fmt(data.kpis.total_profit) },
+    { label: 'Profit margin', value: data.kpis.profit_margin_pct + '%' },
+    { label: 'Total orders', value: data.kpis.total_orders.toLocaleString() },
+    { label: 'Avg order value', value: fmt(data.kpis.avg_order_value) },
+  ];
+  kpiGrid.innerHTML = kpis.map(k => `<div class="kpi"><div class="label">${k.label}</div><div class="value">${k.value}</div></div>`).join('');
+
+  // Loss-making category callout
+  if (data.loss_categories && data.loss_categories.length) {
+    const names = data.loss_categories.map(c => `${c.category} (${c.margin_pct}% margin)`).join(', ');
+    document.getElementById('loss-callout').innerHTML =
+      `<div class="callout"><b>Insight:</b> ${data.loss_categories.length} categories are losing money despite generating revenue — ${names}. These are the first candidates for a pricing or discount-policy review.</div>`;
+  }
+
+  const palette = ['#1D6E56','#B5573A','#3E5C8A','#8A6B3D','#6B4E8A','#3D8A7A'];
+
+  new Chart(document.getElementById('chart-monthly'), {
+    type: 'line',
+    data: { labels: data.monthly.months, datasets: [{ label: 'Revenue', data: data.monthly.revenue, borderColor: palette[0], backgroundColor: 'rgba(29,110,86,0.08)', fill: true, tension: 0.25, pointRadius: 0 }] },
+    options: { plugins: { legend: { display: false } }, scales: { x: { ticks: { maxTicksLimit: 10, font: { size: 10 } } }, y: { ticks: { callback: v => '$' + (v/1000) + 'k' } } } }
+  });
+
+  new Chart(document.getElementById('chart-dept'), {
+    type: 'doughnut',
+    data: { labels: data.by_department.labels, datasets: [{ data: data.by_department.revenue, backgroundColor: palette }] },
+    options: { plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } } }
+  });
+
+  new Chart(document.getElementById('chart-category'), {
+    type: 'bar',
+    data: { labels: data.by_category.labels, datasets: [
+      { label: 'Revenue', data: data.by_category.revenue, backgroundColor: palette[2] },
+      { label: 'Profit', data: data.by_category.profit, backgroundColor: palette[1] },
+    ] },
+    options: { plugins: { legend: { position: 'bottom' } }, scales: { x: { ticks: { font: { size: 9 }, maxRotation: 60, minRotation: 40 } }, y: { ticks: { callback: v => '$' + (v/1000) + 'k' } } } }
+  });
+
+  new Chart(document.getElementById('chart-region'), {
+    type: 'bar',
+    data: { labels: data.by_region.labels, datasets: [{ label: 'Profit', data: data.by_region.profit, backgroundColor: palette[0] }] },
+    options: { plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => '$' + (v/1000) + 'k' } } } }
+  });
+
+  new Chart(document.getElementById('chart-segment'), {
+    type: 'bar',
+    data: { labels: data.by_segment.labels, datasets: [
+      { label: 'Revenue', data: data.by_segment.revenue, backgroundColor: palette[2] },
+      { label: 'Profit', data: data.by_segment.profit, backgroundColor: palette[0] },
+    ] },
+    options: { plugins: { legend: { position: 'bottom' } }, scales: { y: { ticks: { callback: v => '$' + (v/1000) + 'k' } } } }
+  });
+
+  new Chart(document.getElementById('chart-shipmode'), {
+    type: 'bar',
+    data: { labels: data.ship_mode.labels, datasets: [{ label: 'Avg days', data: data.ship_mode.avg_days, backgroundColor: palette[3] }] },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } } }
+  });
+
+  new Chart(document.getElementById('chart-topcust'), {
+    type: 'bar',
+    data: { labels: data.top_customers.names, datasets: [{ label: 'Revenue', data: data.top_customers.revenue, backgroundColor: palette[4] }] },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { ticks: { callback: v => '$' + (v/1000) + 'k', font: { size: 9 } } }, y: { ticks: { font: { size: 9 } } } } }
+  });
+
+});
+</script>
+</body>
+</html>

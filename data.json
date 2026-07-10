@@ -1,0 +1,296 @@
+{
+  "kpis": {
+    "total_revenue": 8952027,
+    "total_profit": 1312415,
+    "total_orders": 6455,
+    "profit_margin_pct": 14.7,
+    "avg_order_value": 1387
+  },
+  "yearly": {
+    "years": [
+      "2013",
+      "2014",
+      "2015",
+      "2016"
+    ],
+    "revenue": [
+      371971,
+      1717979,
+      3152871,
+      3709206
+    ],
+    "profit": [
+      42796,
+      330341,
+      483181,
+      456097
+    ]
+  },
+  "monthly": {
+    "months": [
+      "2013-01",
+      "2013-02",
+      "2013-03",
+      "2013-04",
+      "2013-05",
+      "2013-06",
+      "2013-07",
+      "2013-08",
+      "2013-09",
+      "2013-10",
+      "2013-11",
+      "2013-12",
+      "2014-01",
+      "2014-02",
+      "2014-03",
+      "2014-04",
+      "2014-05",
+      "2014-06",
+      "2014-07",
+      "2014-08",
+      "2014-09",
+      "2014-10",
+      "2014-11",
+      "2014-12",
+      "2015-01",
+      "2015-02",
+      "2015-03",
+      "2015-04",
+      "2015-05",
+      "2015-06",
+      "2015-07",
+      "2015-08",
+      "2015-09",
+      "2015-10",
+      "2015-11",
+      "2015-12",
+      "2016-01",
+      "2016-02",
+      "2016-06",
+      "2016-07",
+      "2016-08",
+      "2016-09",
+      "2016-10",
+      "2016-11",
+      "2016-12"
+    ],
+    "revenue": [
+      30565,
+      21202,
+      23176,
+      10027,
+      24566,
+      14582,
+      19105,
+      4586,
+      8122,
+      40017,
+      156794,
+      19229,
+      725,
+      4189,
+      3257,
+      1601,
+      3869,
+      96,
+      243570,
+      290740,
+      295659,
+      234356,
+      327680,
+      312237,
+      35170,
+      12316,
+      3256,
+      94,
+      2454,
+      90,
+      454979,
+      482185,
+      650152,
+      533581,
+      558127,
+      420467,
+      944883,
+      988063,
+      16015,
+      235909,
+      294982,
+      279453,
+      337955,
+      313562,
+      298384
+    ]
+  },
+  "by_department": {
+    "labels": [
+      "Technology",
+      "Furniture",
+      "Office Supplies"
+    ],
+    "revenue": [
+      3515005,
+      3178638,
+      2258384
+    ],
+    "profit": [
+      683088,
+      177337,
+      451990
+    ]
+  },
+  "by_category": {
+    "labels": [
+      "Office Machines",
+      "Chairs & Chairmats",
+      "Telephones and Communication",
+      "Tables",
+      "Copiers and Fax",
+      "Binders and Binder Accessories",
+      "Storage & Organization",
+      "Bookcases",
+      "Computer Peripherals",
+      "Appliances",
+      "Office Furnishings",
+      "Paper"
+    ],
+    "revenue": [
+      1218655,
+      1164586,
+      1144284,
+      1061922,
+      661215,
+      638583,
+      585717,
+      507496,
+      490851,
+      456736,
+      444634,
+      253620
+    ],
+    "profit": [
+      168079,
+      165341,
+      297944,
+      -72506,
+      129154,
+      226582,
+      8071,
+      -7714,
+      87911,
+      121641,
+      92216,
+      35360
+    ]
+  },
+  "by_region": {
+    "labels": [
+      "East",
+      "Central",
+      "West",
+      "South"
+    ],
+    "revenue": [
+      3143122,
+      2294603,
+      2002353,
+      1511949
+    ],
+    "profit": [
+      475024,
+      458668,
+      271578,
+      107145
+    ]
+  },
+  "by_segment": {
+    "labels": [
+      "Corporate",
+      "Home Office",
+      "Consumer",
+      "Small Business"
+    ],
+    "revenue": [
+      3269431,
+      2168965,
+      1835242,
+      1678389
+    ],
+    "profit": [
+      505515,
+      283884,
+      206546,
+      316470
+    ],
+    "customers": [
+      1111,
+      734,
+      615,
+      672
+    ]
+  },
+  "ship_mode": {
+    "labels": [
+      "Express Air",
+      "Delivery Truck",
+      "Regular Air"
+    ],
+    "avg_days": [
+      14.8,
+      16.9,
+      17.3
+    ]
+  },
+  "top_customers": {
+    "names": [
+      "Joshua N. Milligan",
+      "Glen Caldwell",
+      "Rosemary O'Brien",
+      "Leigh Burnette Hurley",
+      "Kristine Connolly",
+      "Nina Horne Kelly",
+      "Neal Wolfe",
+      "Priscilla Kane",
+      "Dana Teague",
+      "Kim Weiss"
+    ],
+    "revenue": [
+      123748,
+      89272,
+      86541,
+      83651,
+      81296,
+      78243,
+      69118,
+      61611,
+      61299,
+      58947
+    ]
+  },
+  "loss_categories": [
+    {
+      "category": "Tables",
+      "revenue": 1061922,
+      "profit": -72506,
+      "margin_pct": -6.8
+    },
+    {
+      "category": "Bookcases",
+      "revenue": 507496,
+      "profit": -7714,
+      "margin_pct": -1.5
+    },
+    {
+      "category": "Rubber Bands",
+      "revenue": 8670,
+      "profit": -2837,
+      "margin_pct": -32.7
+    },
+    {
+      "category": "Scissors, Rulers and Trimmers",
+      "revenue": 40432,
+      "profit": -1938,
+      "margin_pct": -4.8
+    }
+  ]
+}
